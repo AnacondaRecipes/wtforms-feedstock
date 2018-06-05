@@ -29,6 +29,14 @@ test:
   imports:
     - wtforms
     - wtforms.csrf
+    - wtforms.ext
+    - wtforms.ext.appengine
+    - wtforms.ext.csrf
+    - wtforms.ext.dateutil
+    - wtforms.ext.django
+    - wtforms.ext.django.templatetags
+    - wtforms.ext.i18n
+    - wtforms.ext.sqlalchemy
     - wtforms.fields
     - wtforms.widgets
 
