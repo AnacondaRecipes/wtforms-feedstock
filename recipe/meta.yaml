@@ -1,14 +1,14 @@
 {% set name = "WTForms" %}
-{% set version = "2.1" %}
-{% set sha256 = "ffdf10bd1fa565b8233380cb77a304cd36fd55c73023e91d4b803c96bc11d46f" %}
+{% set version = "2.2" %}
+{% set sha256 = "49c6dc46a188db98be7582046db35bae3e4701b71a2e8f4212873289cd51553a" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.zip
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.zip
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256 }}
 
 build:
@@ -16,7 +16,7 @@ build:
   script: python setup.py install --single-version-externally-managed --record record.txt
 
 requirements:
-  build:
+  host:
     - python
     - setuptools
   run:
@@ -26,6 +26,14 @@ test:
   imports:
     - wtforms
     - wtforms.csrf
+    - wtforms.ext
+    - wtforms.ext.appengine
+    - wtforms.ext.csrf
+    - wtforms.ext.dateutil
+    - wtforms.ext.django
+    - wtforms.ext.django.templatetags
+    - wtforms.ext.i18n
+    - wtforms.ext.sqlalchemy
     - wtforms.fields
     - wtforms.widgets
 
@@ -33,7 +41,7 @@ about:
   home: http://wtforms.simplecodes.com
   license: BSD 3-Clause
   license_family: BSD
-  license_file: LICENSE.txt
+  license_file: LICENSE.rst
   summary: 'A flexible forms validation and rendering library for Python'
   doc_url: http://wtforms.readthedocs.io
   dev_url: https://github.com/wtforms/wtforms
