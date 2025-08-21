@@ -1,6 +1,6 @@
 {% set name = "WTForms" %}
-{% set version = "2.3.3" %}
-{% set sha256 = "81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c" %}
+{% set version = "3.2.1" %}
+{% set sha256 = "df3e6b70f3192e92623128123ec8dca3067df9cfadd43d59681e210cfb8d4682" %}
 
 package:
   name: {{ name|lower }}
@@ -8,19 +8,21 @@ package:
 
 source:
   fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  url: https://pypi.org/packages/source/W/WTForms/wtforms-3.2.1.tar.gz
   sha256: {{ sha256 }}
 
 build:
   noarch: python
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps -vv
+  skip: true  # [py<39]
 
 requirements:
   host:
     - python
     - pip
     - babel >=2.6.0
+    - hatchling
   run:
     - python
     - markupsafe
