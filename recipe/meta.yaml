@@ -1,44 +1,61 @@
-{% set name = "WTForms" %}
-{% set version = "2.3.3" %}
-{% set sha256 = "81195de0ac94fbc8368abbaf9197b88c4f3ffd6c2719b5bf5fc9da744f3d829c" %}
+{% set name = "wtforms" %}
+{% set version = "3.2.1" %}
 
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256 }}
+  url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  sha256: df3e6b70f3192e92623128123ec8dca3067df9cfadd43d59681e210cfb8d4682
 
 build:
-  noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . --no-deps -vv
+  skip: true  # [py<39]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
-    - python
     - pip
+    - python
+    - hatchling
+    - setuptools  # [py>=312]
     - babel >=2.6.0
   run:
     - python
     - markupsafe
 
 test:
+  source_files:
+    - tests
+  requires:
+    - pip
+    - pytest
+    - babel >=2.6.0
+    - email_validator
   imports:
     - wtforms
     - wtforms.csrf
     - wtforms.fields
     - wtforms.widgets
+  commands:
+    - pip check
+    - pytest tests -v  # [not win]
+    # Assertion fail on Windows
+    - pytest tests -v -k "not (test_basic)"  # [win]
 
 about:
-  home: http://wtforms.simplecodes.com
+  home: https://wtforms.simplecodes.com
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE.rst
   summary: A flexible forms validation and rendering library for Python
-  doc_url: http://wtforms.readthedocs.io
+  description: |
+    WTForms is a flexible forms validation and rendering library for Python web development. 
+    It can work with whatever web framework and template engine you choose. 
+    It supports data validation, CSRF protection, internationalization (I18N), and more. 
+    There are various community libraries that provide closer integration with popular frameworks.
+  doc_url: https://wtforms.readthedocs.io
   dev_url: https://github.com/wtforms/wtforms
 
 extra:
