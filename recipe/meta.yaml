@@ -1,5 +1,5 @@
 {% set name = "wtforms" %}
-{% set version = "3.2.1" %}
+{% set version = "3.2.2" %}
 
 package:
   name: {{ name|lower }}
@@ -7,11 +7,11 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: df3e6b70f3192e92623128123ec8dca3067df9cfadd43d59681e210cfb8d4682
+  sha256: 7b00c73f8670f35d4edb0293dcd81b980528bee72fd662b182aaba27ae570b93
 
 build:
   number: 0
-  skip: true  # [py<39]
+  skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
@@ -23,7 +23,9 @@ requirements:
     - babel >=2.6.0
   run:
     - python
-    - markupsafe
+    - markupsafe >=1.1.1
+  run_constrained:
+    - email_validator >=2.0
 
 test:
   source_files:
@@ -51,9 +53,9 @@ about:
   license_file: LICENSE.rst
   summary: A flexible forms validation and rendering library for Python
   description: |
-    WTForms is a flexible forms validation and rendering library for Python web development. 
-    It can work with whatever web framework and template engine you choose. 
-    It supports data validation, CSRF protection, internationalization (I18N), and more. 
+    WTForms is a flexible forms validation and rendering library for Python web development.
+    It can work with whatever web framework and template engine you choose.
+    It supports data validation, CSRF protection, internationalization (I18N), and more.
     There are various community libraries that provide closer integration with popular frameworks.
   doc_url: https://wtforms.readthedocs.io
   dev_url: https://github.com/wtforms/wtforms
