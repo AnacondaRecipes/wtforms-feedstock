@@ -1,5 +1,5 @@
 {% set name = "wtforms" %}
-{% set version = "3.2.2" %}
+{% set version = "3.3.1" %}
 
 package:
   name: {{ name }}
@@ -7,24 +7,31 @@ package:
 
 source:
   url: https://pypi.org/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 7b00c73f8670f35d4edb0293dcd81b980528bee72fd662b182aaba27ae570b93
+  sha256: 9d10ccb5740290c9ae6673522d87bcae3b669cf0cb4e4584aee229b4694af10c
 
 build:
   number: 0
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
-  skip: true  # [py<310]
+  skip: true  # [py<311]
 
 requirements:
   host:
     - pip
     - python
     - hatchling
-    - wheel  # [py>=312]
-    - setuptools  # [py>=312]
+    # Build hook compiles the catalogs with Babel; setuptools/wheel are needed
+    # because the hook declares them for python >= 3.12.
     - babel >=2.6.0
+    - setuptools  # [py>=312]
+    - wheel  # [py>=312]
   run:
     - python
     - markupsafe >=1.1.1
+  run_constrained:
+    # optional-dependencies: email
+    - email_validator >=2.0
+    # guarded optional import used by locale-aware DecimalField
+    - babel >=2.6.0
 
 test:
   source_files:
@@ -37,27 +44,30 @@ test:
   imports:
     - wtforms
     - wtforms.csrf
+    - wtforms.datalist
     - wtforms.fields
+    - wtforms.validators
     - wtforms.widgets
   commands:
     - pip check
-    - pytest tests -v  # [not win]
-    # Assertion fail on Windows
-    - pytest tests -v -k "not (test_basic)"  # [win]
+    - pytest tests -vv  # [not win]
+    # test_date.py::test_basic uses the %-m/%-d strftime directive, which is not
+    # supported by the Windows C runtime.
+    - pytest tests -vv --deselect tests/fields/test_date.py::test_basic  # [win]
 
 about:
-  home: https://wtforms.simplecodes.com
+  home: https://wtforms.readthedocs.io
   license: BSD-3-Clause
   license_family: BSD
   license_file: LICENSE.rst
   summary: A flexible forms validation and rendering library for Python
   description: |
-    WTForms is a flexible forms validation and rendering library for Python web development. 
-    It can work with whatever web framework and template engine you choose. 
-    It supports data validation, CSRF protection, internationalization (I18N), and more. 
+    WTForms is a flexible forms validation and rendering library for Python web development.
+    It can work with whatever web framework and template engine you choose.
+    It supports data validation, CSRF protection, internationalization (I18N), and more.
     There are various community libraries that provide closer integration with popular frameworks.
   doc_url: https://wtforms.readthedocs.io
-  dev_url: https://github.com/wtforms/wtforms
+  dev_url: https://github.com/pallets-eco/wtforms
 
 extra:
   recipe-maintainers:
