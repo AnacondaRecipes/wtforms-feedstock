@@ -30,8 +30,6 @@ requirements:
   run_constrained:
     # optional-dependencies: email
     - email_validator >=2.0
-    # guarded optional import used by locale-aware DecimalField
-    - babel >=2.6.0
 
 test:
   source_files:
